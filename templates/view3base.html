@@ -1,0 +1,36 @@
+<!doctype html>
+<html>
+<head>
+	<title>Python Flask File Upload Example</title>
+	<h2>Select a file to upload</h2>
+</head>
+<body>
+	<p>
+		{% with messages = get_flashed_messages() %}
+		  {% if messages %}
+			<ul>
+			{% for message in messages %}
+			  <li>{{ message }}</li>
+			{% endfor %}
+			</ul>
+		  {% endif %}
+		{% endwith %}
+	</p>
+	{% if filename %}
+		<div>
+			<canvas id="canvas_editor" style="border:1px solid black"></canvas>
+			<img src="{{ url_for('display_image', arg_filename=filename) }}">
+		</div>
+	{% endif %}
+	<form method="post" action="/" enctype="multipart/form-data">
+		<dl>
+			<p>
+				<input type="file" name="file" autocomplete="off" required>
+			</p>
+		</dl>
+		<p>
+			<input type="submit" value="Submit">
+		</p>
+	</form>
+</body>
+</html>

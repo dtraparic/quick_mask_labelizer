@@ -1,0 +1,53 @@
+<!doctype html>
+<html>
+<head>
+	<title>Python Flask File Upload Example</title>
+	<h2>Select a file to upload</h2>
+</head>
+<body>
+	<p>
+		{% with messages = get_flashed_messages() %}
+		  {% if messages %}
+			<ul>
+			{% for message in messages %}
+			  <li>{{ message }}</li>
+			{% endfor %}
+			</ul>
+		  {% endif %}
+		{% endwith %}
+	</p>
+	{% if filename %}
+		<div>
+			<canvas id="canvas_editor" style="border:1px solid black"></canvas>
+			<img src="{{ url_for('display_image', filename=filename) }}">
+		</div>
+	{% endif %}
+	<form method="post" action="/" enctype="multipart/form-data">
+		<dl>
+			<p>
+				<input type="file" name="file" autocomplete="off" required>
+			</p>
+		</dl>
+		<p>
+			<input type="submit" value="Submit">
+		</p>
+	</form>
+</body>
+<script>
+	let canvas = document.querySelector('#canvas_editor');
+	let ctx = canvas.getContext("2d");
+
+
+	let background = new Image();
+	console.log("On cherche l'img dans : ", "{{ url_for('display_image', filename=filename) }}")
+	background.src = "{{ url_for('display_image', filename=filename) }}"
+	console.log("Border :", background.width, background.height)
+
+	background.onload = function(){
+		canvas.width = background.width;
+		canvas.height = background.height;
+		console.log("Border2 :", background.width, background.height)
+		ctx.drawImage(background, 0, 0);
+	}
+</script>
+</html>

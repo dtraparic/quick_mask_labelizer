@@ -1,0 +1,44 @@
+<!doctype html>
+<html>
+<head>
+	<title>Python Flask File Upload Example</title>
+	<h2>Select a file to upload</h2>
+	<style>*{ text-align: center}</style>
+</head>
+<body>
+	<p>
+		{% with messages = get_flashed_messages() %}
+		  {% if messages %}
+			<ul>
+			{% for message in messages %}
+			  <li>{{ message }}</li>
+			{% endfor %}
+			</ul>
+		  {% endif %}
+		{% endwith %}
+	</p>
+	{% if filename %}
+		<div>
+			<canvas id="canvas_editor" style="border:1px solid black"></canvas>
+<!--			<img src="{{ url_for('static', filename='images_edit/'+filename) }}">-->
+		</div>
+	{% endif %}
+	<form method="post" action="/" enctype="multipart/form-data">
+		<input type="file" name="file" autocomplete="off" required>
+		<button type="submit">Submit</button>
+	</form>
+
+	{% if filename %}
+		<form method="post" action="/next">
+			<button type="submit">Validate and Next image</button>
+		</form>
+	{% endif %}
+</body>
+{% if filename %}
+	<script src="static/functions3.js"></script>
+	<script>
+		init("{{ url_for('static', filename='images_edit/'+filename) }}")
+
+	</script>
+{% endif %}
+</html>

@@ -1,0 +1,61 @@
+<!doctype html>
+<html>
+<head>
+	<title>Python Flask File Upload Example</title>
+	<h2>Select a file to upload</h2>
+	<style>
+		*{ text-align: center}
+
+	</style>
+</head>
+<body>
+	<p>
+		{% with messages = get_flashed_messages() %}
+		  {% if messages %}
+			<ul>
+			{% for message in messages %}
+			  <li>{{ message }}</li>
+			{% endfor %}
+			</ul>
+		  {% endif %}
+		{% endwith %}
+	</p>
+	{% if filename %}
+		<div class="fullpage_container">
+			<div class="mask_container" style="display:inline-block; position:relative; border:1px solid black">
+				<img class="mask" src="{{ url_for('static', filename='images_edit/'+filename) }}" style="vertical-align:top">
+				<canvas class="canvas_mask" style="position:absolute; left:0; opacity:1"></canvas>
+			</div>
+			<div class="drawer_container" style="display:inline-block; position:relative; border:1px solid black">
+				<img src="{{ url_for('static', filename='images_edit/'+filename) }}" style="vertical-align:top">
+				<canvas id="canvas_editor" style="position:absolute; left:0; opacity:0.7"></canvas>
+			</div>
+		</div>
+	{% endif %}
+	<form method="post" action="/" enctype="multipart/form-data">
+		<input type="file" name="file" autocomplete="off" required>
+		<button type="submit">Submit</button>
+	</form>
+
+	{% if filename %}
+		<form method="post" action="/next_mask">
+			<select name="entity_name" id="mask_entity_choose">
+				<option value="person">Person</option>
+				<option value="car">Car</option>
+				<option value="plane">Plane</option>
+			</select>
+			<button type="submit">Validate current mask</button>
+		</form>
+		<form method="post" action="/next_img">
+			<button type="submit">Validate and Next image</button>
+		</form>
+	{% endif %}
+</body>
+{% if filename %}
+	<script src="static/functions4.js"></script>
+	<script>
+		init("{{ url_for('static', filename='images_edit/'+filename) }}")
+
+	</script>
+{% endif %}
+</html>
